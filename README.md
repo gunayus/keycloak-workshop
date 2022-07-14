@@ -4,6 +4,7 @@ Keycloak workshop @JBCNConf'2022
 ## pre-requisites
 + JDK 11+
 + Keycloak 18 : download and extract keycloak binary from https://github.com/keycloak/keycloak/releases/download/18.0.2/keycloak-18.0.2.zip
++ Postman
 
 in the github repository following modules are provided
 
@@ -19,6 +20,18 @@ follow the steps to start and verify the ldap server
 + run LdapServerApplication.java as a Spring boot application 
 + verify that the ldap server is running by requesiting following URL
 + http://localhost:8090/ldap/get-users
+
+there are couple of ways to run LdapServerApplication.java as a Spring boot application
+### run from your IDE
+
+![](doc/screen_shot_01-run-ldap-server.png)
+
+### run with maven wrapper 
+run following command from the ldap-server folder
+```
+cd ldap-server
+./mvnw spring-boot:run
+```
 
 ### pom.xml
 following dependencies are important for booting the embedded ldap server
