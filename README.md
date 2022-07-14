@@ -1,7 +1,7 @@
 # keycloak-workshop
 Keycloak workshop @JBCNConf'2022
 
-## pre-requisites
+## 1. pre-requisites
 + JDK 11+
 + Keycloak 18 : download and extract keycloak binary from https://github.com/keycloak/keycloak/releases/download/18.0.2/keycloak-18.0.2.zip
 + Postman
@@ -12,7 +12,7 @@ in the github repository following modules are provided
 + backend-spring-boot : spring boot backend module, used to secure REST APIs 
 + frontend-vuejs : vue.js frontend module, used to secure UI application
 
-## embedded ldap server
+## 2. embedded ldap server
 ldap-server module is provided to start an ldap server for demonstration purposes. in the scope of this workshop we will use ldap server for authenticating users.
 
 follow the steps to start and verify the ldap server
@@ -109,4 +109,22 @@ objectclass: groupOfNames
 cn: normalUsers
 member: uid=jbrown,ou=People,dc=keycloak,dc=org
 ```
+
+## 3. keycloak server
+let's start and configure the keycloak server for identity management solution
+### download keycloak server
+download and unzip keycloak server from following url : https://github.com/keycloak/keycloak/releases/download/18.0.2/keycloak-18.0.2.zip
+
+### start keycloak server
+run the following command from the folder keycloak-18.0.2
+on Mac / Linux 
+```
+./bin/kc.sh start-dev
+```
+on Windows
+```
+./bin/kc.bat start-dev
+```
+if keyclaok server starts successfully, you should see similar output as follows
+![](doc/screen_shot_02_run_keycloak_server.png)
 
