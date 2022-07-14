@@ -149,6 +149,6 @@ enter following values and click Create
 + Password confirmation : secret
 
 after creating the admin user, click on Administration Console 
-![](doc/secren_shot_04_admin-console.png)
+![](doc/secren_shot_04_admin-console.png | width=100)
 enter admin / secret as username and password
 ![](doc/screen_shot_05-admin-login-page.png)
