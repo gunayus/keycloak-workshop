@@ -125,6 +125,30 @@ on Windows
 ```
 ./bin/kc.bat start-dev
 ```
-if keyclaok server starts successfully, you should see similar output as follows
-![](doc/screen_shot_02_run_keycloak_server.png)
 
+if keyclaok server starts successfully, you should see similar output as follows
+
+```
+...
+2022-07-14 23:34:31,314 INFO  [io.quarkus] (main) Keycloak 18.0.2 on JVM (powered by Quarkus 2.7.5.Final) started in 17.136s. Listening on: http://0.0.0.0:8080
+...
+2022-07-14 23:34:31,325 WARN  [org.keycloak.quarkus.runtime.KeycloakMain] (main) Running the server in development mode. DO NOT use this configuration in production.
+```
+
+![](doc/screen_shot_02_run-keycloak-server.png)
+
+### configure keycloak server
+open the keycloak administration console. 
+http://localhost:8080/
+
+On the first run, you have to specify an admin user and password
+![](doc/screen_shot_03-keycloak-admin-password.png)
+enter following values and click Create
++ Username : admin
++ Password : secret
++ Password confirmation : secret
+
+after creating the admin user, click on Administration Console 
+![](doc/secren_shot_04_admin-console.png)
+enter admin / secret as username and password
+![](doc/screen_shot_05-admin-login-page.png)
