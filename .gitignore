@@ -1,7 +1,3 @@
-application-local-db.properties
-application-test-db.properties
-application-kafka-consumer.properties
-persistence-mappings*.xml
 
 HELP.md
 target/
@@ -37,4 +33,4 @@ build/
 ### VS Code ###
 .vscode/
 
-liquibase/*
+node_modules/

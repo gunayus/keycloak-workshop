@@ -137,7 +137,7 @@
         "usersDn" : "ou=People,dc=keycloak,dc=org",
         "userObjectClasses" : "inetOrgPerson, organizationalPerson",
         "usernameLDAPAttribute" : "uid",
-        "bindDn" : "uid=admin",
+        "bindDn" : "uid=admin,ou=system",
         "bindCredential" : "secret",
         "rdnLDAPAttribute" : "uid",
         "vendor" : "other",
