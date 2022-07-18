@@ -373,6 +373,74 @@ this time when you you call the backend services from the Postman collection you
 In the next section, we will go over setting up the ROLEs and make sure that each service can be called properly by correct users
 
 ## 5. setting up ROLEs in keycloak for authorization
+In the scope of this workshop, we will have two roles 
++ NORMAL_USER
++ SUPER_USER
 
+Super users are allowed to perform operations normal users can. we should extend our keycloak configuration to manage the authorization rules for our demo-client. we will be doing following configurations
++ define two roles for demo-client 
++ sycnhronize the user groups from ldap (normalUsers, superUsers)
++ associate the roles with the user groups so that when a user is added to a group, the user gets the roles for that group
 
+### create roles for demo-client
+goto admin console : http://localhost:8080/admin/master/console/#/realms/ldap-demo/clients. if required, provide admin username / password (admin / secret) to login to admin dashboard
+![](doc/screen_shot_24_demo-client.png)
+
+click on demo-client to configure the details, goto Roles tab 
+![](doc/screen_shot_25_client-roles.png)
+
+click on `Add Role` button to create a new role
++ Role Name : NORMAL_USER
++ Description : Normal users
++ click Save
+![](doc/screen_shot_26_add-role.png)
+
+repeat this step to add `SUPER_USER` role 
++ Role Name : SUPER_USER
++ Description : Super users
+
+### synchronize groups from ldap to keycloak
+we need to synchronize the user groups from ldap to keycloak at this point
+
++ click on `User Federation` from the left navigation menu
++ click on `ldap-embedded-server` to see the details
++ click on `Mappers` tab to add a new mapper
++ click on `Create` button 
++ enter following values
+  + Name : LDAP Group mapper
+  + Mapper Type : group-ldap-mapper
+  + LDAP Groups DN : ou=UserRoles,dc=keycloak,dc=org
+  + Drop non-existing groups during sync : ON
++ click on `Save` button and then click on `Sync LDAP Groups to Keycloak` button to synch the user groups
++ ![](doc/screen_shot_27_group-ldap-mapper.png)
++ verify the user groups imported by clicking Groups from the left navigation pane
++ ![](doc/screen_shot_28_groups.png)
++ verify that `normalUsers` and `superUsers` groups have also members syncyronized from ldap by clicking on the group name and go to `Members` tab.
++ ![](doc/screen_shot_29_normal-users-members.png)
++ ![](doc/screen_shot_30_super-user-members.png)
+
+in order to associate client roles to groups, we should do the following steps
++ click on `normalUsers` group from `Groups` tree view
++ go to `Role Mappings` tab
++ from the `Client Roles` dropdown list, select `demo-client` 
++ from the `Available Roles` list select `NORMAL_USER` role and click on `Add selected` button
++ you should see a message indicating the role added to the group's client roles
++ ![](doc/screen_shot_31_add-role-to-normalUsers.png)
+
+repeat the same steps for `superUsers` group to add `NORMAL_USER` and `SUPER_USER` roles to the superUsers group. 
++ ![](doc/screen_shot_32_add-role-to-superUsers.png)
+
+### verify roles in the access token 
+from the Postman go to `v18.0 - Authenticate - bwilson - SUPER_USER` request and run it. you will get a JWT token including `SUPER_USER` and `NORMAL_USER` roles. you can see it for yourself by copy pasting the token to jwt.io and decode the token. 
++ ![](doc/screen_shot_33_jwt-io-token-details.png)
+
+if you authenticate as a NORMAL_USER (jbrown), you should only be able to call following requests
++ GET Auth details - HTTP-200
++ DO Super things - HTTP-403, since jbrown is not a SUPER_USER this service should return HTTP-403
++ DO Normal things - HTTP-200 , jbrown should be enabled to perform this operation 
+
+if you authenticate as a SUPER_USER (bwilson), you should be able to call all the requests
++ GET Auth details - HTTP-200
++ DO Super things - HTTP-200, bwilson is enabled to perform this operation
++ DO Normal things - HTTP-200 , bwilson is enabled to perform this operation 
 
