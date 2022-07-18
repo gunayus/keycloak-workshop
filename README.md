@@ -198,9 +198,9 @@ now we need a user federation to integrate with our previously activated embedde
 + click on ```ldap-embedded-server```, verfiy the values, click on ```Test connection``` and ```Test authentication``` buttons and scroll down to the bottom of the page
 
 #### synchronize all the users from ldap-server
-****+ after either creating or importing our ldap-realm, we can synchronize all the users from the ldap server to keycloak
++ after either creating or importing our ldap-realm, we can synchronize all the users from the ldap server to keycloak
 + you should see blue buttons at the bottom of the page, click on ```Synchronize all users button``` and you should see a message saying that two users were successfully imported from ldap server ![](doc/screen_shot_12_synchronize-all-users-from-ldap.png)
-+ verify the users by going to ```Users``` page and ```view all users``` ![](doc/screen_shot_13_view-all-users.png)****
++ verify the users by going to ```Users``` page and ```view all users``` ![](doc/screen_shot_13_view-all-users.png)
 
 ### verify user authentication from ldap 
 now that we have a realm and user federation configured, we should be able to perform username / password authentication which will authenticate the user credentials from our embedded ldap server. 
