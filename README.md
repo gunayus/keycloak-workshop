@@ -206,7 +206,7 @@ now we need a user federation to integrate with our previously activated embedde
 now that we have a realm and user federation configured, we should be able to perform username / password authentication which will authenticate the user credentials from our embedded ldap server. 
 Keycloak provides predefined account client which provides a web application for testing authentication methods and checking user details. 
 + click on ```Clients``` from the left navigation pane ![](doc/screen_shot_15_clients.png)
-+ click on ```http://localhost:8080/realms/ldap-demo/account/``` link which will open a new tab and show the account web application
++ click on http://localhost:8080/realms/ldap-demo/account/ link which will open a new tab and show the account web application
 + click on ```Sign in``` button on the top right corner
 + enter user credentials
   + username : bwilson
@@ -245,7 +245,7 @@ We should create custom clients for different applications. in the scope of this
 #### verify username / password authentication for demo-client
 now we can try to authenticate via our demo-client and the same ldap username / password credentials. 
 
-for this purpose we have provided a [Postman collection](Keycloak%20Workshop.postman_collection.json). we can use Postman to send a POST request to the keycloak server for authentication. 
+for this purpose we have provided a Postman collection [Keycloak Workshop.postman_collection.json](Keycloak%20Workshop.postman_collection.json). we can use Postman to send a POST request to the keycloak server for authentication. 
 
 + open Postman and import the collection provided. then you will have the required HTTP requests
 + ![](doc/screen_shot_23_postman-collection.png)
