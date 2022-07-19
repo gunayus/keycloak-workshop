@@ -2,11 +2,29 @@
 Keycloak workshop @JBCNConf'2022
 
 ## 1. pre-requisites
+For the backend;
 + JDK 11+
 + Keycloak 18 : download and extract keycloak binary from https://github.com/keycloak/keycloak/releases/download/18.0.2/keycloak-18.0.2.zip
 + Postman
 + basic knowledge on Java development
 + basic knowledge on Maven  
++ basic knowledge on Spring security
+
+For the frontend;
++ npm version 8+
++ node version 16+
++ basic knowledge on building and running vue.js app with npm
+
+For **optional** github authentication;
++ create an OAuth application on your github account
++ goto github.com / Settings / Developer settings / OAuth Apps
++ click New OAuth App and enter following values
+  + Application name : keycloak-oauth
+  + Homepage URL : http://localhost:8080
+  + Authorization callback URL : http://localhost:8080/realms/ldap-demo/broker/github/endpoint
+  + click `Register application` button
+  + make sure that you copy / paste the client ID and client secret values aside.
+
 
 in the github repository following modules are provided
 
@@ -128,7 +146,7 @@ on Windows
 .\bin\kc.bat start-dev
 ```
 
-if keyclaok server starts successfully, you should see similar output as follows
+if keycloak server starts successfully, you should see similar output as follows
 
 ```
 ...
@@ -164,7 +182,8 @@ There are two ways to create a realm
 2. import from existing realm configuration file ```keycloak-config/ldaprealm.json```
 
 #### alternative 1. create ldap-demo realm from scratch
-+ click ```Add realm``` button
++ click ```Add realm``` button which is on the dropdown listing the realms to the top left part of the page
++ ![](doc/screen_shot_34_add-realm-button.png)
 + enter name : ```ldap-demo```
 + click ```Create``` button
 + you should have ```ldap-demo``` created ![](doc/screen_shot_09_ldap-realm-created.png)
@@ -215,7 +234,7 @@ Keycloak provides predefined account client which provides a web application for
 + click ```Sign in``` and you should see the account details page  ![](doc/screen_shot_18_account-details-page.png)
 + this indicates that the whole integration between keycloak and ldap server works perfectly
 + you can navigate to `Personal Info`, `Account Security`, `Applications` pages
-+ also, you can go back to keyclaok admin console and see the session for the user who has just authenticated from the Sessions link ![](doc/screen_shot_19_view-sessions.png)
++ also, you can go back to keycloak admin console and see the session for the user who has just authenticated from the Sessions link ![](doc/screen_shot_19_view-sessions.png)
 
 ### verify realm openid-connect configuration
 + click `Realm Settings` from left navigation pane
@@ -354,10 +373,10 @@ you can try to call the backend services from the Postman collection. All will r
 in order to make backend serve correctly with the authorization requreiments couple of TODO's need to be fixed in backend module
 
 #### 1. application.properties
-`spring.security.oauth2.resourceserver.jwt.jwk-set-uri` parameter value needs to be fixed
+`spring.security.oauth2.resourceserver.jwt.jwk-set-uri` parameter value needs to be fixed. Remember you can get this value from the following URL : http://localhost:8080/realms/ldap-demo/.well-known/openid-configuration
 
 #### 2. ApiSecurityContextRepository.java
-find the TODO in this class to make sure that the JWT access token provided by the client is decoded by the jwtDecoder bean which uses Keycloak jwks_uri to decode the token securely.
+find the TODO in this class to make sure that the JWT access token provided by the client is decoded by the jwtDecoder bean which uses Keycloak jwks_uri to decode the token securely. 
 
 #### 3. DemoController.java
 In the controller class, you should enable the `@PreAuthorize` directives
