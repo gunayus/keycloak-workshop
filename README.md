@@ -463,3 +463,117 @@ if you authenticate as a SUPER_USER (bwilson), you should be able to call all th
 + DO Super things - HTTP-200, bwilson is enabled to perform this operation
 + DO Normal things - HTTP-200 , bwilson is enabled to perform this operation 
 
+## 6. frontend vue.js project
+In the github repository, we provide the vue.js application under frontend-vuejs folder. we will go over the main parts of the vue.js application and see how it works 
+
+### .env.local 
+this file defines the local environment variables and we define the KEYCLOAK related variables here. pay attention the the values which match the values we have configured so far on keycloak side.
+```
+VUE_APP_KEYCLOAK_API_URL=http://localhost:8080
+VUE_APP_KEYCLOAK_REALM=ldap-demo
+VUE_APP_KEYCLOAK_CLIENT_ID=demo-client
+```
+
+### package.json
+pay attention to keycloak.js dependancy and the version mataches with the keycloak server version 18 we use 
+```
+"dependencies": {
+"clipboard": "^2.0.10",
+"core-js": "^3.8.3",
+"keycloak-js": "^18.0.0",
+"mitt": "^3.0.0",
+"vue": "^3.2.13",
+"vue-axios": "^3.4.1",
+"vue3-json-viewer": "^2.1.0"
+},
+```
+
+### vue.config.json
+here we configure a proxy dev server for routing backend requests to our spring boot backend app running at http://localhost:8070
+```
+module.exports = defineConfig({
+  transpileDependencies: true,
+  devServer: {
+    port: 3000,
+    open: true,
+    proxy: `http://localhost:8070`
+  }
+})
+```
+
+### main.js
+here is the actual integration to keycloak server from the vue.js application. 
+
+```
+// KEYCLOAK
+const initOptions = {
+url: process.env.VUE_APP_KEYCLOAK_API_URL,
+realm: process.env.VUE_APP_KEYCLOAK_REALM,
+clientId: process.env.VUE_APP_KEYCLOAK_CLIENT_ID
+}
+
+const keycloak = Keycloak(initOptions)
+
+keycloak.init({onLoad: 'login-required'}).then(() => {
+
+    store.commit('setUserName',keycloak.tokenParsed.preferred_username)
+    store.commit('setKeycloakToken',keycloak.token)
+    store.commit('setKeycloakTokenParsed',keycloak.tokenParsed)
+
+    emitter.on('keycloak-logout', () => {
+        keycloak.logout()
+    })
+
+    // Token Refresh
+    setInterval(() => {
+        keycloak
+            .updateToken(70)
+            .then((refreshed) => {
+                if (refreshed) {
+                    store.commit('setUserName',keycloak.tokenParsed.preferred_username)
+                    store.commit('setKeycloakToken',keycloak.token)
+                    store.commit('setKeycloakTokenParsed',keycloak.tokenParsed)
+
+                    console.info('Token refreshed' + refreshed)
+                } else {
+                    console.warn('Token not refreshed, valid for ' + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds')
+                }
+            })
+            .catch(() => {
+                keycloak.logout()
+            })
+    }, 60 * 1000)
+})
+```
+## 7. optional github authentication
+if you want to integrate your keyclaok with github as authentication provider, it's quite straight forward to do so. you must have done the application registration on github developer settings as explained in the prerequisites section. you should keep your github client ID and client secret values ready.
+
+the steps to setup github in keycloak is as follows
++ goto keycloak admin console and if required, select ldap-demo 
++ goto Identity Providers from the left navigation menu
++ ![](doc/screen_shot_35_identity-providers.png)
++ select github from the identity providers list to create a new identity provider
++ ![](doc/screen_shot_36_github-identity-provider.png)
++ Enter following values
+  + Client ID : {client ID value that you have acquired from github}
+  + Client Secret : {client Secret value that you have acquired from github}
+  + click Save
++ that's it, when you try to authenticate from any web application either account app, or our vue.js app you will see two options on the login screen now
++ ![](doc/screen_shot_37_keycloak-login-with-github.png)
+
+## 8. conclusion
+to summarize we have seen completed following operations in the scope of this workshop 
++ run embedded ldap server on local
++ set up keycloak
++ integrate keycloak to work with local embedded ldap server
++ synchronize users from ldap to keycloak
++ authenticat users from keycloak 
++ set up spring security on spring boot backend application to use JWT token acquired from keycloak
++ synchronize groups from ldap to keycloak
++ set up groups to have proper roles
++ verify the access rules based on user roles
++ start vue.js frontend application 
++ verify authentication through keycloak 
++ optional
+  + set up github authentication
+  + verify authentication via github from vue.js app

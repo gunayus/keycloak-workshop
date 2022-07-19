@@ -1,1 +1,0 @@
-# keycloak-meetup backend project
