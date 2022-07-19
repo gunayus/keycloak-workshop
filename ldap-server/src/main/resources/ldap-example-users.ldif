@@ -69,10 +69,10 @@ objectclass: top
 objectclass: groupOfNames
 cn: normalUsers
 member: uid=jbrown,ou=People,dc=keycloak,dc=org
+member: cn=superUsers,ou=UserRoles,dc=keycloak,dc=org
 
 dn: cn=superUsers,ou=UserRoles,dc=keycloak,dc=org
 objectclass: top
 objectclass: groupOfNames
 cn: superUsers
 member: uid=bwilson,ou=People,dc=keycloak,dc=org
-member: cn=normalUsers,ou=UserRoles,dc=keycloak,dc=org

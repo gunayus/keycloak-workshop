@@ -128,6 +128,7 @@ objectclass: top
 objectclass: groupOfNames
 cn: normalUsers
 member: uid=jbrown,ou=People,dc=keycloak,dc=org
+member: cn=superUsers,ou=UserRoles,dc=keycloak,dc=org
 ```
 
 ## 3. keycloak server
